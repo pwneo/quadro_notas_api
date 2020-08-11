@@ -39,4 +39,13 @@ router.put("/:id", ({ params: { id }, body }, response) => {
   }
 });
 
+router.delete("/:id", ({ params: { id } }, response) => {
+  try {
+    const grade = repository.deletebyId(id);
+    response.send(grade);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
 export default router;

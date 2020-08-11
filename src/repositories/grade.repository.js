@@ -53,6 +53,15 @@ export function update(id,{student, subject, type, value}) {
   return updatedGrade;
 }
 
+export function deletebyId(id) {
+  const index = cacheDatabase.grades.findIndex((grade) => grade.id === id);
+  if (index < 0) {
+    throw new Error(`Grade not found. Id: ${id}`);
+  }
+  cacheDatabase.grades.splice(index, 1);
+  writeToDatabase();
+}
+
 async function readToDatabase() {
   cacheDatabase = JSON.parse(await readFile(path.DATABASE_URL));
 }

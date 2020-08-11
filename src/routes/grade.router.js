@@ -48,4 +48,13 @@ router.delete("/:id", ({ params: { id } }, response) => {
   }
 });
 
+router.patch("/:id", ({ body , params:{id}}, response) => {
+    try {
+        const grade = repository.patchProperty(id, body);
+        response.send(grade);
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
 export default router;

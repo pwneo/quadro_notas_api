@@ -8,15 +8,7 @@ let cacheDatabase = [];
 
 export function insert({ student, subject, type, value }) {
   try {
-    const grade = {
-      id: uuid(),
-      student,
-      subject,
-      type,
-      value,
-      timestamp: new Date(),
-    };
-
+    const grade = { id: uuid(), student, subject, type, value, timestamp: new Date() };
     cacheDatabase.grades.push(grade);
     writeToDatabase();
     return grade;
@@ -30,36 +22,54 @@ export function findAll() {
 }
 
 export function findById(id) {
-  const grade = cacheDatabase.grades.find((grade) => grade.id === id);
+  const grade = cacheDatabase.grades[findIndex(id)];
   if (!grade) {
     throw new Error(`Grade not found. Id: ${id}`);
   }
   return grade;
 }
 
-export function update(id,{student, subject, type, value}) {
-  const index = cacheDatabase.grades.findIndex((grade) => grade.id === id);
-  if (index < 0) {
+export function update(id, body) {
+  const gradeFound = findById(id);
+  if (!gradeFound) {
     throw new Error(`Grade not found. Id: ${id}`);
   }
-  const updatedGrade = cacheDatabase.grades[index];
-  updatedGrade.student = student;
-  updatedGrade.subject = subject;
-  updatedGrade.type = type;
-  updatedGrade.value = value;
-  cacheDatabase.grades[index] = updatedGrade;
+  const propertiesDbObject = Reflect.ownKeys(gradeFound);
+  propertiesDbObject.forEach(property => {
+    Reflect.set(gradeFound, property, Reflect.get(body, property));
+  });
 
   writeToDatabase();
-  return updatedGrade;
+  return gradeFound;
 }
 
 export function deletebyId(id) {
-  const index = cacheDatabase.grades.findIndex((grade) => grade.id === id);
+  const index = findIndex(id);
   if (index < 0) {
     throw new Error(`Grade not found. Id: ${id}`);
   }
   cacheDatabase.grades.splice(index, 1);
   writeToDatabase();
+}
+
+export function patchProperty(id, body) {
+  const gradeFound = findById(id);
+  if (!gradeFound) {
+    throw new Error(`Grade not found. Id: ${id}`);
+  }
+  const propertiesDbObject = Reflect.ownKeys(gradeFound);
+  propertiesDbObject.forEach(property => {
+    if (Reflect.has(body, property)){
+      Reflect.set(gradeFound, property, Reflect.get(body, property));
+    }
+  });
+
+  writeToDatabase();
+  return gradeFound;
+}
+
+function findIndex(id){
+  return cacheDatabase.grades.findIndex(grade => grade.id === id);
 }
 
 async function readToDatabase() {

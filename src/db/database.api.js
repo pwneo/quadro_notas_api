@@ -15,3 +15,11 @@ export async function createDataBase() {
         });
   }
 }
+
+export async function readToDatabase() {
+  return JSON.parse(await readFile(path.DATABASE_URL));
+}
+
+export async function writeToDatabase(cacheDatabase) {
+  await writeFile(path.DATABASE_URL, JSON.stringify(cacheDatabase));
+}

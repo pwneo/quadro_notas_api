@@ -37,6 +37,22 @@ export function findById(id) {
   return grade;
 }
 
+export function update(id,{student, subject, type, value}) {
+  const index = cacheDatabase.grades.findIndex((grade) => grade.id === id);
+  if (index < 0) {
+    throw new Error(`Grade not found. Id: ${id}`);
+  }
+  const updatedGrade = cacheDatabase.grades[index];
+  updatedGrade.student = student;
+  updatedGrade.subject = subject;
+  updatedGrade.type = type;
+  updatedGrade.value = value;
+  cacheDatabase.grades[index] = updatedGrade;
+
+  writeToDatabase();
+  return updatedGrade;
+}
+
 async function readToDatabase() {
   cacheDatabase = JSON.parse(await readFile(path.DATABASE_URL));
 }

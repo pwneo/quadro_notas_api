@@ -3,9 +3,8 @@ import * as repository from "../repositories/grade.repository.js";
 
 const router = express.Router();
 
-router.post("/", (request, response) => {
+router.post("/", ({ body }, response) => {
   try {
-    const { body } = request;
     const newGrade = repository.insert(body);
     response.send(newGrade);
   } catch (error) {
@@ -25,6 +24,15 @@ router.get("/", (request, response) => {
 router.get("/:id", ({ params: { id } }, response) => {
   try {
     const grade = repository.findById(id);
+    response.send(grade);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+router.put("/:id", ({ params: { id }, body }, response) => {
+  try {
+    const grade = repository.update(id, body);
     response.send(grade);
   } catch (error) {
     console.log(error.message);

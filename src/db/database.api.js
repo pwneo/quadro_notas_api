@@ -5,11 +5,11 @@ const { readFile, writeFile } = fs;
 
 export async function createDataBase() {
   try {
-    await readFile(`${path.DATABASE_URL}/grades.json`);
+    await readFile(path.DATABASE_URL);
     console.log('Database found!');
   } catch (error) {
     const data = { grades: [] };
-    await writeFile(`${path.DATABASE_URL}/grades.json`, JSON.stringify(data))
+    await writeFile(path.DATABASE_URL, JSON.stringify(data))
         .then(() => {
             console.log('Database created!');
         });

@@ -1,5 +1,6 @@
 import { v4 as uuid } from "uuid";
 import * as db from '../db/database.api.js';
+import {env} from '../environment.js';
 
 let cacheDatabase = [];
 db.readToDatabase().then( database => cacheDatabase = database);
@@ -33,7 +34,7 @@ export function update(id, body) {
     throw new Error(`Grade not found. Id: ${id}`);
   }
   const gradeFound = findById(id);
-  getAllProperties().forEach(property => {
+  env.ALL_PROPERTIES.forEach(property => {
       Reflect.set(gradeFound, property, Reflect.get(body, property));
   });
   cacheDatabase.grades[index] = gradeFound;
@@ -56,7 +57,7 @@ export function patchProperty(id, body) {
     throw new Error(`Grade not found. Id: ${id}`);
   }
   const gradeFound = findById(id);
-  getAllProperties().forEach(property => {
+  env.ALL_PROPERTIES.forEach(property => {
     if (Reflect.has(body, property)){
       Reflect.set(gradeFound, property, Reflect.get(body, property));
     }
@@ -64,10 +65,6 @@ export function patchProperty(id, body) {
   cacheDatabase.grades[index] = gradeFound;
   db.writeToDatabase(cacheDatabase);
   return gradeFound;
-}
-
-export function getAllProperties(){
-  return ['student', 'subject', 'type', 'value'];
 }
 
 function findIndex(id){

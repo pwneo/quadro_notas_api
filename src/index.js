@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { createDataBase } from "./db/database.api.js";
 import GradeRouter from "./routes/grade.router.js";
+
 const app = express();
 const port = 8000;
 

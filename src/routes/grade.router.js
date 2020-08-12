@@ -1,11 +1,12 @@
 import express from "express";
 import * as repository from "../repositories/grade.repository.js";
+import * as service from "../services/grade.service.js";
 
 const router = express.Router();
 
 router.post("/", ({ body }, response) => {
   try {
-    const newGrade = repository.insert(body);
+    const newGrade = service.save(body);
     response.send(newGrade);
   } catch (error) {
     console.log(error.message);
@@ -14,7 +15,7 @@ router.post("/", ({ body }, response) => {
 
 router.get("/", (request, response) => {
   try {
-    const grades = repository.findAll();
+    const grades = service.listALl();
     response.send(grades);
   } catch (error) {
     console.log(error.message);
@@ -23,7 +24,7 @@ router.get("/", (request, response) => {
 
 router.get("/:id", ({ params: { id } }, response) => {
   try {
-    const grade = repository.findById(id);
+    const grade = service.findById(id);
     response.send(grade);
   } catch (error) {
     console.log(error.message);
@@ -32,7 +33,7 @@ router.get("/:id", ({ params: { id } }, response) => {
 
 router.put("/:id", ({ params: { id }, body }, response) => {
   try {
-    const grade = repository.update(id, body);
+    const grade = service.update(id, body);
     response.send(grade);
   } catch (error) {
     console.log(error.message);
@@ -41,7 +42,7 @@ router.put("/:id", ({ params: { id }, body }, response) => {
 
 router.delete("/:id", ({ params: { id } }, response) => {
   try {
-    const grade = repository.deletebyId(id);
+    const grade = service.remove(id);
     response.send(grade);
   } catch (error) {
     console.log(error.message);
@@ -50,7 +51,7 @@ router.delete("/:id", ({ params: { id } }, response) => {
 
 router.patch("/:id", ({ body , params:{id}}, response) => {
     try {
-        const grade = repository.patchProperty(id, body);
+        const grade = service.patch(id, body);
         response.send(grade);
     } catch (error) {
         console.log(error.message);

@@ -20,29 +20,22 @@ export function findAll() {
 }
 
 export function findById(id) {
-  const grade = cacheDatabase.grades[findIndex(id)];
-  
+  const grade = cacheDatabase.grades[findIndex(id)]; 
   if (!grade) {
     throw new Error(`Grade not found. Id: ${id}`);
   }
-  
   return grade;
 }
 
 export function update(id, body) {
   const index = findIndex(id);
-  
   if (index < 0) {
     throw new Error(`Grade not found. Id: ${id}`);
   }
-
   const gradeFound = findById(id);
-  Reflect.ownKeys(cacheDatabase.grades[0])
-    .filter(property => property !== 'id' && property !== 'timestamp')
-    .forEach(property => {
+  getAllProperties().forEach(property => {
       Reflect.set(gradeFound, property, Reflect.get(body, property));
-    });
-  
+  });
   cacheDatabase.grades[index] = gradeFound;
   db.writeToDatabase(cacheDatabase);
   return gradeFound;
@@ -50,33 +43,31 @@ export function update(id, body) {
 
 export function deletebyId(id) {
   const index = findIndex(id);
-  
   if (index < 0) {
     throw new Error(`Grade not found. Id: ${id}`);
   }
-  
   cacheDatabase.grades.splice(index, 1);
   writeToDatabase(cacheDatabase);
 }
 
 export function patchProperty(id, body) {
   const index = findIndex(id);
-  
   if (index < 0) {
     throw new Error(`Grade not found. Id: ${id}`);
   }
-  
   const gradeFound = findById(id);
-  Reflect.ownKeys(gradeFound)
-    .forEach(property => {
-      if (Reflect.has(body, property)){
-        Reflect.set(gradeFound, property, Reflect.get(body, property));
-      }
-    });
-  
+  getAllProperties().forEach(property => {
+    if (Reflect.has(body, property)){
+      Reflect.set(gradeFound, property, Reflect.get(body, property));
+    }
+  });
   cacheDatabase.grades[index] = gradeFound;
   db.writeToDatabase(cacheDatabase);
   return gradeFound;
+}
+
+export function getAllProperties(){
+  return ['student', 'subject', 'type', 'value'];
 }
 
 function findIndex(id){

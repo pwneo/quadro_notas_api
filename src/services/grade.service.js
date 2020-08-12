@@ -1,37 +1,38 @@
 import * as repository from '../repositories/grade.repository.js';
-import * as utils from '../utils/grade.utils.js';
+import {gradePatchSchema, gradePostOrPutSchema, validate} from "../utils/validation.utils.js";
 
-export function save(data){
-    if (!(utils.isPropertiesValidated(data) && utils.isValuesValidated(data) && utils.isNotNullAndNotUndefined(data))){
-       throw new Error('Invalid Data');
+export function save(data) {
+    const result = validate(gradePostOrPutSchema, data);
+    if (result.hasError) {
+        throw new Error(JSON.stringify(result.messages));
     }
-    return repository.insert(data); 
+    return repository.insert(data);
 }
 
-export function listALl(){
+export function listALl() {
     return repository.findAll();
 }
 
-export function findById(id){
+export function findById(id) {
     return repository.findById(id);
 }
 
-export function remove(id){
+export function remove(id) {
     return repository.deletebyId(id);
 }
 
-export function update(id, data){
-    if (!(utils.isPropertiesValidated(data) && utils.isValuesValidated(data) && utils.isNotNullAndNotUndefined(data))){
-        throw new Error('Invalid Data');
+export function update(id, data) {
+    const result = validate(gradePostOrPutSchema, data);
+    if (result.hasError) {
+        throw new Error(JSON.stringify(result.messages));
     }
     return repository.update(id, data);
 }
 
-export function patch(id, data){
-    const propertiesData = Reflect.ownKeys(data);
-    const validValues = utils.isValuesValidated(data, propertiesData);
-    if (!validValues){
-        throw new Error('Invalid Data');
+export function patch(id, data) {
+    const result = validate(gradePatchSchema, data);
+    if (result.hasError) {
+        throw new Error(JSON.stringify(result.messages));
     }
-    return repository.patchProperty(id, data);   
+    return repository.patchProperty(id, data);
 }

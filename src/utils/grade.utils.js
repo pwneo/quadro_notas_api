@@ -1,4 +1,4 @@
-import { env } from "../environment";
+import { env } from "../environment.js";
 
 export function isNotNullAndNotUndefined(data){
     return env.ALL_PROPERTIES

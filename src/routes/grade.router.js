@@ -1,61 +1,73 @@
 import express from "express";
-import * as repository from "../repositories/grade.repository.js";
 import * as service from "../services/grade.service.js";
+import { logger } from "../logs/grade.logs.js";
 
 const router = express.Router();
 
-router.post("/", ({ body }, response) => {
+router.post("/", ({ body, method, baseUrl }, response, next) => {
   try {
     const newGrade = service.save(body);
     response.send(newGrade);
+    logger.info(`${method} ${baseUrl}: grade added: ${JSON.stringify(newGrade)}`);
   } catch (error) {
-    console.log(error.message);
+    next(error);
   }
 });
 
-router.get("/", (request, response) => {
+router.get("/", ({method, baseUrl}, response, next) => {
   try {
     const grades = service.listALl();
     response.send(grades);
+    logger.info(`${method} ${baseUrl}: list all grades: ${JSON.stringify(grades)}`);
   } catch (error) {
-    console.log(error.message);
+    next(error);
   }
 });
 
-router.get("/:id", ({ params: { id } }, response) => {
+router.get("/:id", ({ params: { id }, method, baseUrl }, response, next) => {
   try {
-    const grade = service.findById(id);
-    response.send(grade);
+    const gradeFound = service.findById(id);
+    response.send(gradeFound);
+    logger.info(`${method} ${baseUrl}: grade found: ${JSON.stringify(gradeFound)}`);
   } catch (error) {
-    console.log(error.message);
+    next(error);
   }
 });
 
-router.put("/:id", ({ params: { id }, body }, response) => {
+router.put("/:id", ({ params: { id }, body, method, baseUrl }, response, next) => {
   try {
-    const grade = service.update(id, body);
-    response.send(grade);
+    const gradeUpdated = service.update(id, body);
+    response.send(gradeUpdated);
+    logger.info(`${method} ${baseUrl}: grade updated: ${JSON.stringify(gradeUpdated)}`);
   } catch (error) {
-    console.log(error.message);
+    next(error);
   }
 });
 
-router.delete("/:id", ({ params: { id } }, response) => {
+router.delete("/:id", ({ params: { id }, method, baseUrl }, response, next) => {
   try {
-    const grade = service.remove(id);
-    response.send(grade);
+    const gradeDeleted = service.remove(id);
+    response.send(gradeDeleted);
+    logger.info(`${method} ${baseUrl}: grade deleted. Id: ${id}`);
   } catch (error) {
-    console.log(error.message);
+    next(error);
   }
 });
 
-router.patch("/:id", ({ body , params:{id}}, response) => {
+router.patch("/:id", ({ body , params:{id}, method, baseUrl}, response, next) => {
     try {
-        const grade = service.patch(id, body);
-        response.send(grade);
-    } catch (error) {
-        console.log(error.message);
-    }
+        const gradeProperty = service.patch(id, body);
+        response.send(gradeProperty);
+        logger.info(`${method} ${baseUrl}: property updated: ${JSON.stringify(gradeProperty)}`);
+      } catch (error) {
+        next(error);
+      }
+});
+
+/*caputa todos os erros que ocorrerem nas requisições que vem pelo router*/
+router.use(({message}, {method, baseUrl}, response, next) => {
+  response.status(400).send({ error: message });
+  logger.error(`${method} ${baseUrl}: ${message}`);
 });
 
 export default router;

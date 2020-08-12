@@ -48,7 +48,7 @@ export function deletebyId(id) {
     throw new Error(`Grade not found. Id: ${id}`);
   }
   cacheDatabase.grades.splice(index, 1);
-  writeToDatabase(cacheDatabase);
+  db.writeToDatabase(cacheDatabase);
 }
 
 export function patchProperty(id, body) {

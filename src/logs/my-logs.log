@@ -10,4 +10,3 @@
 2020-08-12T03:23:06.428Z - grades-logs - info: PATCH /grades: property updated: {"id":"20d1a134-f200-4319-aa0b-4e3f320ee64b","student":"Paulo Wesk. de A. Ferreira","subject":"Modulo 2 - API REST Node.JSssssss","type":"Trabalho Pratico","value":40,"timestamp":"2020-08-12T03:17:11.618Z"}
 2020-08-12T03:23:24.868Z - grades-logs - info: PUT /grades: grade updated: {"id":"20d1a134-f200-4319-aa0b-4e3f320ee64b","student":"Paulo W. de A. Ferreira","subject":"Modulo 2 - API REST Node.JS","type":"abccfsdsds","value":40,"timestamp":"2020-08-12T03:17:11.618Z"}
 2020-08-12T03:23:32.062Z - grades-logs - error: DELETE /grades: writeToDatabase is not defined
-2020-08-12T03:23:51.411Z - grades-logs - info: DELETE /grades: grade deleted: 20d1a134-f200-4319-aa0b-4e3f320ee64b

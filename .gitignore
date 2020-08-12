@@ -1,3 +1,4 @@
 node_modules/
 package-lock.json
 src/db/database.json
+src/logs/my-logs.log

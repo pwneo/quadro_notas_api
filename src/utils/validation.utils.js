@@ -1,13 +1,13 @@
 import Joi from '@hapi/joi';
 
-export const gradePostOrPutSchema = Joi.object({
+export const gradeRequiredSchema = Joi.object({
     student: Joi.string().min(3).max(100).regex(/^[a-zA-Z]/).required(),
     subject: Joi.string().min(3).max(100).required(),
     type: Joi.string().min(3).max(100).required(),
     value: Joi.number().min(0).max(100).required()
 });
 
-export const gradePatchSchema = Joi.object({
+export const gradeNotRequiredSchema = Joi.object({
     student: Joi.string().min(3).max(100).regex(/^[a-zA-Z]/),
     subject: Joi.string().min(3).max(100),
     type: Joi.string().min(3).max(100),

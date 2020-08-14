@@ -16,7 +16,7 @@ router.post("/", ({ body, method, baseUrl }, response, next) => {
 
 router.get("/", ({method, baseUrl}, response, next) => {
   try {
-    const grades = service.listALl();
+    const grades = service.listAll();
     response.send(grades);
     logger.info(`${method} ${baseUrl}: list all grades: ${JSON.stringify(grades)}`);
   } catch (error) {
@@ -32,6 +32,36 @@ router.get("/:id", ({ params: { id }, method, baseUrl }, response, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+router.get("/average-student-subject/:student/:subject", ({params:{student, subject}, method, baseUrl}, response, next) => {
+   try {
+    const gradeAverage = service.gradeAverage({student, subject});
+    response.send(gradeAverage);
+    logger.info(`${method} ${baseUrl}: grade average: ${JSON.stringify(gradeAverage)}`);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/average-subject-type/:subject/:type", ({params:{subject, type}, method, baseUrl}, response, next) => {
+   try {
+    const gradeAverage = service.gradeAverage({subject, type});
+    response.send(gradeAverage);
+    logger.info(`${method} ${baseUrl}: grade average: ${JSON.stringify(gradeAverage)}`);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/top-three-grades/:subject/:type", ({params:{subject, type}, method, baseUrl}, response, next) => {
+    try {
+        const gradeAverage = service.topThreeGrades({subject, type});
+        response.send(gradeAverage);
+        logger.info(`${method} ${baseUrl}: Top Three Grades: ${JSON.stringify(gradeAverage)}`);
+    } catch (error) {
+        next(error);
+    }
 });
 
 router.put("/:id", ({ params: { id }, body, method, baseUrl }, response, next) => {

@@ -14,6 +14,7 @@ export function listAll() {
 }
 
 export function findById(id) {
+    console.log('Entrou no service ')
     return repository.findById(id);
 }
 

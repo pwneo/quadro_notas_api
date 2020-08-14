@@ -21,6 +21,7 @@ export function findAll() {
 }
 
 export function findById(id) {
+  console.log('Entrou no repository')
   const grade = cacheDatabase.grades[findIndex(id)]; 
   if (!grade) {
     throw new Error(`Grade not found. Id: ${id}`);
@@ -68,5 +69,5 @@ export function patchProperty(id, body) {
 }
 
 function findIndex(id){
-  return cacheDatabase.grades.findIndex(grade => grade.id === id);
+  return cacheDatabase.grades.findIndex(grade => grade.id == id);
 }

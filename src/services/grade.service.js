@@ -65,7 +65,7 @@ export function topThreeGrades(data) {
     grades = listAll().grades
         .filter(grade => grade.subject === data.subject && grade.type === data.type)
         .sort((a, b) => b.value - a.value)
-        .map((grade, index) =>{
+        .filter((grade, index) =>{
           if (index < 3) {
               return grade;
           }
